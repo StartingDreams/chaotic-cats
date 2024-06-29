@@ -16,4 +16,5 @@ export const images = createTable("images", {
   enabled: boolean("enabled").default(false).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+  deletedAt: timestamp("deletedAt"),
 });
