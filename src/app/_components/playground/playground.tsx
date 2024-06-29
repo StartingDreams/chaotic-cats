@@ -12,7 +12,6 @@ const mockCats = (num: number): CatType[] => {
       id: i,
       name: "Test Cat",
       color: randomColor(),
-      dimensions: [200, 135],
       chaos: 0,
       prestige: 0,
       createdAt: new Date(),

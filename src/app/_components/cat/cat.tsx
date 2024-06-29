@@ -9,26 +9,20 @@ export enum CatColoring {
   White = "white",
 }
 
-type CatDimensions = [number, number];
-
 export type CatType = {
   id: number;
   name: string;
   color: CatColoring;
-  dimensions?: CatDimensions;
   chaos: number;
   prestige: number;
   createdAt: Date;
   updatedAt: Date;
 };
 
-const defaultDimensions: CatDimensions = [200, 250];
 type CatProps = {
   cat: CatType;
 };
 export async function Cat({ cat }: CatProps) {
-  const dimensions = cat.dimensions ?? defaultDimensions;
-
   return (
     <div className="w-1/4">
       <img src={`/cats/${cat.color}_cat.png`} alt={cat.name} className="cat" />
