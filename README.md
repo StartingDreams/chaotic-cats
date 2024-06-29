@@ -13,12 +13,12 @@
 
 ## TODO
 
-- [] Make it deploy
-- [] Scaffold basic UI
-- [] Setup a database
+- [x] Make it deploy
+- [x] Scaffold basic UI
+- [x] Setup a database
 - [] Attach a database to the UI
 - [] error management (w/ Sentry)
-- [] Authentication (w/ Clerk)
+- [x] Authentication (w/ Clerk)
 
 ## Tech Stack
 
