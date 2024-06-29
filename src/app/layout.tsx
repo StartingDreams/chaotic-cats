@@ -9,14 +9,16 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
-  children,
-}: {
+type Props = {
   children: React.ReactNode;
-}) {
+};
+
+export function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>{children}</body>
     </html>
   );
 }
+
+export default RootLayout;

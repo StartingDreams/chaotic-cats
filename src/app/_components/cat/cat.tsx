@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export enum CatColoring {
   Black = "black",
   Brown = "brown",
@@ -33,13 +31,9 @@ export async function Cat({ cat }: CatProps) {
 
   return (
     <div className="w-1/4">
-      <Image
-        src={`/cats/${cat.color}_cat.png`}
-        alt={cat.name}
-        className="cat"
-        width={dimensions[0]}
-        height={dimensions[1]}
-      />
+      <img src={`/cats/${cat.color}_cat.png`} alt={cat.name} className="cat" />
     </div>
   );
 }
+
+export default Cat;
