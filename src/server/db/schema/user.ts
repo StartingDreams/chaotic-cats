@@ -1,7 +1,7 @@
+import { relations } from "drizzle-orm";
 import {
   pgTableCreator,
   serial,
-  text,
   timestamp,
   integer,
   uniqueIndex,
@@ -9,28 +9,28 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { env } from "~/env";
+import { setting } from "./setting";
 
 const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 
-export const breeds = createTable(
-  "breeds",
+export const user = createTable(
+  "user",
   {
     id: serial("id").primaryKey(),
-    breed: varchar("breed", { length: 50 }).notNull(),
-    variant: varchar("variant", { length: 50 }).default("default").notNull(),
-    rarity: integer("rarity").notNull(),
-    blurb: text("blurb").notNull(),
-
-    // other
+    authServiceId: varchar("auth_service_id", { length: 255 }).notNull(),
+    level: integer("level").default(1).notNull(),
     enabled: boolean("enabled").default(false).notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),
   },
-  (catBreeds) => ({
-    variantIndex: uniqueIndex("variant_idx").on(
-      catBreeds.breed,
-      catBreeds.variant,
+  (user) => ({
+    authServiceIdIndex: uniqueIndex("auth_service_id_idx").on(
+      user.authServiceId,
     ),
   }),
 );
+
+export const usersRelations = relations(user, ({ many }) => ({
+  settings: many(setting),
+}));

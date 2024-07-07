@@ -8,16 +8,17 @@ import {
   varchar,
   json,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { user } from "./user";
 import { env } from "~/env";
+import { relations } from "drizzle-orm";
 
 const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 
-export const settings = createTable(
-  "settings",
+export const setting = createTable(
+  "setting",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id").references(() => users.id),
+    userId: integer("user_id").references(() => user.id),
     settingName: varchar("setting_name", { length: 255 }).notNull(),
     value: varchar("value", { length: 255 }).notNull(),
     metadata: json("metadata").notNull(),
@@ -26,11 +27,18 @@ export const settings = createTable(
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),
   },
-  (settings) => ({
-    userIdIndex: uniqueIndex("user_id_idx").on(settings.userId),
+  (setting) => ({
+    userIdIndex: uniqueIndex("user_id_idx").on(setting.userId),
     settingNameToUserIndex: uniqueIndex("setting_name_to_user_idx").on(
-      settings.userId,
-      settings.settingName,
+      setting.userId,
+      setting.settingName,
     ),
   }),
 );
+
+export const settingsRelations = relations(setting, ({ one }) => ({
+  user: one(user, {
+    fields: [setting.userId],
+    references: [user.id],
+  }),
+}));

@@ -1,32 +1,21 @@
-import { Cat, CatType, CatColoring } from "~/app/_components/cat/cat";
-
-const mockCats = (num: number): CatType[] => {
-  const cats: CatType[] = [];
-  const randomColor = () => {
-    const values = Object.keys(CatColoring);
-    const enumKey = values[Math.floor(Math.random() * values.length)];
-    return CatColoring[enumKey as keyof typeof CatColoring];
-  };
-  for (let i = 0; i < num; i++) {
-    cats.push({
-      id: i,
-      name: "Test Cat",
-      color: randomColor(),
-      chaos: 0,
-      prestige: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  }
-  return cats;
-};
+import { Cat } from "~/app/_components/cat/cat";
+import { db } from "~/server/db";
 
 export async function Playground() {
-  const cats = mockCats(11);
+  const breeds = await db.query.breed.findMany({
+    with: {
+      image: true,
+      basePersonality: true,
+      baseStats: true,
+    },
+  });
+  breeds.forEach((breed) => {
+    console.log(breed);
+  });
   return (
     <>
-      {cats.map((cat) => (
-        <Cat key={cat.id} cat={cat} />
+      {breeds.map((breed) => (
+        <Cat key={breed.id} cat={breed} />
       ))}
     </>
   );

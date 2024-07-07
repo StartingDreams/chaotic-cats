@@ -1,32 +1,31 @@
-export enum CatColoring {
-  Black = "black",
-  Brown = "brown",
-  GreenMagic = "green_magic",
-  Grey = "grey",
-  Orange = "orange",
-  PurpleMagic = "purple_magic",
-  Siamese = "siamese",
-  White = "white",
-}
+import Image from "next/image";
 
-export type CatType = {
-  id: number;
-  name: string;
-  color: CatColoring;
-  chaos: number;
-  prestige: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import type { Breed } from "~/server/db/schema/types";
+
+// /cats/black_cat.png
+// /cats/brown_cat.png
+// /cats/green_magic_cat.png
+// /cats/grey_cat.png
+// /cats/orange_cat.png
+// /cats/purple_magic_cat.png
+// /cats/siamese_cat.png
+// /cats/white_cat.png
 
 type CatProps = {
-  cat: CatType;
+  cat: Breed;
 };
+
 export async function Cat({ cat }: CatProps) {
+  cat.image.url;
+
   return (
-    <div className="w-1/4">
-      <img src={`/cats/${cat.color}_cat.png`} alt={cat.name} className="cat" />
-    </div>
+    <Image
+      src={cat.image.url}
+      alt={cat.name}
+      className="cat"
+      height="50"
+      width="50"
+    />
   );
 }
 

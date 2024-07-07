@@ -10,11 +10,9 @@ import { env } from "~/env";
 
 const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 
-export const baseStats = createTable("base_personality", {
+export const baseStats = createTable("base_stats", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 50 }).notNull(),
-
-  // base stats
   strength: integer("strength").notNull(),
   mass: integer("mass").notNull(),
   dexterity: integer("dexterity").notNull(),
@@ -28,8 +26,6 @@ export const baseStats = createTable("base_personality", {
   willpower: integer("willpower").notNull(),
   mana: integer("mana").notNull(),
   potency: integer("potency").notNull(),
-
-  // other
   enabled: boolean("enabled").default(false).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

@@ -13,16 +13,12 @@ const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 export const basePersonality = createTable("base_personality", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 50 }).notNull(),
-
-  // base personality traits
   charm: integer("charm").notNull(),
   affection: integer("affection").notNull(),
   friendliness: integer("friendliness").notNull(),
   cautiousness: integer("cautiousness").notNull(),
   aggression: integer("aggression").notNull(),
   dominance: integer("dominance").notNull(),
-
-  // other
   enabled: boolean("enabled").default(false).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

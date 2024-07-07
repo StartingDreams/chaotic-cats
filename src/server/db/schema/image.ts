@@ -1,7 +1,8 @@
+import { relations } from "drizzle-orm";
 import {
   pgTableCreator,
   serial,
-  text,
+  varchar,
   timestamp,
   boolean,
 } from "drizzle-orm/pg-core";
@@ -9,10 +10,10 @@ import { env } from "~/env";
 
 const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 
-export const images = createTable("images", {
+export const image = createTable("image", {
   id: serial("id").primaryKey(),
-  slug: text("slug").notNull().unique(),
-
+  name: varchar("name", { length: 255 }).notNull(),
+  url: varchar("url", { length: 1024 }).notNull(),
   enabled: boolean("enabled").default(false).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

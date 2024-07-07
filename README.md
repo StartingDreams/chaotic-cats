@@ -16,7 +16,7 @@
 - [x] Make it deploy
 - [x] Scaffold basic UI
 - [x] Setup a database
-- [] Attach a database to the UI
+- [x] Attach a database to the UI
 - [] error management (w/ Sentry)
 - [x] Authentication (w/ Clerk)
 
