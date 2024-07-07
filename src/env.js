@@ -7,6 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    CLERK_UPDATE_WEBHOOK_SECRET: z.string(),
     TABLE_PREFIX: z.string(),
     POSTGRES_URL: z.string().url(),
     NODE_ENV: z
@@ -28,6 +29,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    CLERK_UPDATE_WEBHOOK_SECRET: process.env.CLERK_UPDATE_WEBHOOK_SECRET,
     TABLE_PREFIX: process.env.TABLE_PREFIX,
     POSTGRES_URL: process.env.POSTGRES_URL,
     NODE_ENV: process.env.NODE_ENV,
