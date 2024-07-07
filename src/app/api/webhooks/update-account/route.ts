@@ -1,7 +1,10 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import type { WebhookEvent } from "@clerk/nextjs/server";
+import type { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
 import { env } from "~/env";
+import { db } from "~/server/db";
+import { user } from "~/server/db/schema/user";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   const WEBHOOK_SECRET = env.CLERK_UPDATE_WEBHOOK_SECRET;
@@ -21,7 +24,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
-        error: "Error occured -- no svix headers",
+        error: "Error occurred: missing svix headers",
       },
       {
         status: 400,
@@ -36,17 +39,17 @@ export async function POST(request: Request) {
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
-  let evt: WebhookEvent;
+  let event: WebhookEvent;
 
   // Verify the payload with the headers
   try {
-    evt = wh.verify(body, {
+    event = wh.verify(body, {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,
     }) as WebhookEvent;
-  } catch (err) {
-    console.error("Error verifying webhook:", err);
+  } catch (error) {
+    console.error("Error verifying webhook:", error);
     return Response.json(
       { success: false, error: "Error occurred" },
       {
@@ -55,12 +58,146 @@ export async function POST(request: Request) {
     );
   }
 
-  // Do something with the payload
-  // For this guide, you simply log the payload to the console
-  const { id } = evt.data;
-  const eventType = evt.type;
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  const {
+    data: { id },
+    type: eventType,
+  } = event;
 
-  return Response.json({ success: true, test: "test" }, { status: 200 });
+  if (!id) {
+    return Response.json(
+      { success: false, error: "No user ID found in the payload" },
+      { status: 400 },
+    );
+  }
+
+  let responseCode = 400;
+  let success = false;
+  let error = `Error processing ${eventType} event`;
+
+  switch (eventType) {
+    case "user.deleted":
+      if (await deleteUser(id)) {
+        success = true;
+        responseCode = 200;
+        error = "";
+      }
+      break;
+    case "user.created":
+      if (await updateUser(event.data)) {
+        success = true;
+        responseCode = 200;
+        error = "";
+      }
+      break;
+    case "user.updated":
+      if (await updateUser(event.data)) {
+        success = true;
+        responseCode = 200;
+        error = "";
+      }
+      break;
+    default:
+      error = `Unknown event type ${eventType}`;
+  }
+
+  return Response.json({ success, error }, { status: responseCode });
 }
+
+const fetchUser = async (authServiceId: string) => {
+  const queryResult = await db
+    .select({
+      id: user.id,
+      username: user.username,
+      preferredName: user.preferredName,
+      isAdmin: user.isAdmin,
+      authServiceId: user.authServiceId,
+      deletedAt: user.deletedAt,
+    })
+    .from(user)
+    .where(eq(user.authServiceId, authServiceId))
+    .limit(1);
+
+  if (queryResult.length > 0) {
+    return queryResult[0];
+  }
+
+  console.log(`User ${authServiceId} not found`);
+  return null;
+};
+
+const updateUser = async (currentUserData: UserJSON) => {
+  let currentUser = await fetchUser(currentUserData.id);
+
+  if (!currentUser) {
+    console.log(`User ${currentUserData.id} not found, creating new user`);
+    const createQueryResult = await db
+      .insert(user)
+      .values({
+        username: currentUserData.username ?? "",
+        preferredName: currentUserData.username ?? "",
+        authServiceId: currentUserData.id,
+      })
+      .returning({
+        id: user.id,
+        username: user.username,
+        preferredName: user.preferredName,
+        isAdmin: user.isAdmin,
+        authServiceId: user.authServiceId,
+        deletedAt: user.deletedAt,
+      });
+    if (createQueryResult.length > 0) {
+      currentUser = createQueryResult[0];
+    }
+  }
+
+  if (!currentUser) {
+    console.log(`Error fetching user ${currentUserData.id}`);
+    return false;
+  }
+
+  if (currentUser.preferredName !== "") {
+    return true;
+  }
+
+  const updateResults = await db
+    .update(user)
+    .set({
+      username: currentUserData.username ?? "",
+      preferredName: currentUserData.username ?? "",
+    })
+    .where(eq(user.authServiceId, currentUserData.id));
+
+  console.log({ updateResults });
+
+  return true;
+};
+
+const deleteUser = async (authServiceId: string) => {
+  const currentUser = await db.query.user.findFirst({
+    columns: {
+      id: true,
+      authServiceId: true,
+      deletedAt: true,
+    },
+    where: eq(user.authServiceId, authServiceId),
+  });
+
+  if (!currentUser) {
+    console.log(`User ${authServiceId} not found`);
+    return false;
+  }
+
+  if (currentUser?.deletedAt) {
+    console.log(`User ${authServiceId} already deleted`);
+    return false;
+  }
+
+  await db
+    .update(user)
+    .set({
+      deletedAt: new Date(),
+    })
+    .where(eq(user.authServiceId, authServiceId));
+
+  return true;
+};

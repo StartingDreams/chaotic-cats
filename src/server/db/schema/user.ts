@@ -17,9 +17,13 @@ export const user = createTable(
   "user",
   {
     id: serial("id").primaryKey(),
-    authServiceId: varchar("auth_service_id", { length: 255 }).notNull(),
+    username: varchar("username", { length: 255 }).notNull(),
+    preferredName: varchar("preferred_name", { length: 255 }).notNull(),
+    authServiceId: varchar("auth_service_id", { length: 255 })
+      .unique()
+      .notNull(),
     level: integer("level").default(1).notNull(),
-    enabled: boolean("enabled").default(false).notNull(),
+    isAdmin: boolean("admin").default(false).notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),

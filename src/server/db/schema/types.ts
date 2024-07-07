@@ -78,8 +78,10 @@ export type Setting = {
 export type User = {
   id: number;
   authServiceId: string;
+  username: string;
+  preferredName: string;
+  isAdmin: boolean;
   level: number;
-  enabled: boolean;
   settings: Setting[];
   updatedAt: Date;
   createdAt: Date;
