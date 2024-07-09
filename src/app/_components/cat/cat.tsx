@@ -20,8 +20,8 @@ export async function Cat({ cat }: CatProps) {
     <Image
       src={cat.image?.url ?? MISSING_IMAGE_URL}
       alt={cat.name}
+      style={{ objectFit: "contain" }}
       className="cat"
-      objectFit="fill"
       height="50"
       width="50"
     />
