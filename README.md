@@ -17,7 +17,7 @@
 - [x] Scaffold basic UI
 - [x] Setup a database
 - [x] Attach a database to the UI
-- [] error management (w/ Sentry)
+- [x] error management (w/ Sentry)
 - [x] Authentication (w/ Clerk)
 
 ## Tech Stack
