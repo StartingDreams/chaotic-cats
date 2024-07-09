@@ -1,6 +1,6 @@
 import Image from "next/image";
-
-import type { Breed } from "~/server/db/schema/types";
+import { MISSING_IMAGE_URL } from "~/app/_utils/defaults";
+import type { Cat } from "~/server/db/schema/types";
 
 // /cats/black_cat.png
 // /cats/brown_cat.png
@@ -11,18 +11,17 @@ import type { Breed } from "~/server/db/schema/types";
 // /cats/siamese_cat.png
 // /cats/white_cat.png
 
-type CatProps = {
-  cat: Breed;
+export type CatProps = {
+  cat: Cat;
 };
 
 export async function Cat({ cat }: CatProps) {
-  cat.image.url;
-
   return (
     <Image
-      src={cat.image.url}
+      src={cat.image?.url ?? MISSING_IMAGE_URL}
       alt={cat.name}
       className="cat"
+      objectFit="fill"
       height="50"
       width="50"
     />

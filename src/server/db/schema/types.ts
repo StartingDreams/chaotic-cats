@@ -42,11 +42,11 @@ export type Breed = {
   rarity: number;
   blurb: string;
   basePersonalityId: number;
-  basePersonality: BasePersonality;
+  basePersonality?: BasePersonality;
   baseStatsId: number;
-  baseStats: BaseStats;
+  baseStats?: BaseStats;
   imageId: number;
-  image: Image;
+  image?: Image;
   enabled: boolean;
   updatedAt: Date;
   createdAt: Date;
@@ -76,13 +76,47 @@ export type Setting = {
 };
 
 export type User = {
-  id: number;
-  authServiceId: string;
+  id: string;
   username: string;
   preferredName: string;
   isAdmin: boolean;
   level: number;
-  settings: Setting[];
+  settings?: Setting[];
+  updatedAt: Date;
+  createdAt: Date;
+  deletedAt: Date | null;
+};
+
+export type Cat = {
+  id: number;
+  name: string;
+  userId: string;
+  user?: User;
+  imageId: number;
+  image?: Image;
+  breedId: number;
+  breed?: Breed;
+  charm: number;
+  affection: number;
+  friendliness: number;
+  cautiousness: number;
+  aggression: number;
+  dominance: number;
+  strength: number;
+  mass: number;
+  dexterity: number;
+  speed: number;
+  toughness: number;
+  endurance: number;
+  knowledge: number;
+  learningEfficiency: number;
+  creativity: number;
+  wisdom: number;
+  willpower: number;
+  mana: number;
+  potency: number;
+  experience: number;
+  level: number;
   updatedAt: Date;
   createdAt: Date;
   deletedAt: Date | null;

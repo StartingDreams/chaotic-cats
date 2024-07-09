@@ -20,11 +20,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body>
-          <main className="flex h-[100dvh] flex-col">
+          <main className="flex h-[100dvh] flex-col bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
             <TopNav />
-            <div className="flex flex-grow flex-row flex-wrap items-center justify-center overflow-x-hidden overflow-y-hidden bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-              {children}
-            </div>
+            <div className="h-full w-full px-2">{children}</div>
           </main>
         </body>
       </html>

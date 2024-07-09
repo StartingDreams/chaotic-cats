@@ -18,11 +18,10 @@ export const setting = createTable(
   "setting",
   {
     id: serial("id").primaryKey(),
-    userId: integer("user_id").references(() => user.id),
+    userId: varchar("user_id", { length: 40 }).references(() => user.id),
     settingName: varchar("setting_name", { length: 255 }).notNull(),
     value: varchar("value", { length: 255 }).notNull(),
     metadata: json("metadata").notNull(),
-    enabled: boolean("enabled").default(false).notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),

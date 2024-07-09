@@ -103,25 +103,24 @@ export async function POST(request: Request) {
   return Response.json({ success, error }, { status: responseCode });
 }
 
-const fetchUser = async (authServiceId: string) => {
+const fetchUser = async (userId: string) => {
   const queryResult = await db
     .select({
       id: user.id,
       username: user.username,
       preferredName: user.preferredName,
       isAdmin: user.isAdmin,
-      authServiceId: user.authServiceId,
       deletedAt: user.deletedAt,
     })
     .from(user)
-    .where(eq(user.authServiceId, authServiceId))
+    .where(eq(user.id, userId))
     .limit(1);
 
   if (queryResult.length > 0) {
     return queryResult[0];
   }
 
-  console.log(`User ${authServiceId} not found`);
+  console.log(`User ${userId} not found`);
   return null;
 };
 
@@ -133,16 +132,15 @@ const updateUser = async (currentUserData: UserJSON) => {
     const createQueryResult = await db
       .insert(user)
       .values({
+        id: currentUserData.id,
         username: currentUserData.username ?? "",
         preferredName: currentUserData.username ?? "",
-        authServiceId: currentUserData.id,
       })
       .returning({
         id: user.id,
         username: user.username,
         preferredName: user.preferredName,
         isAdmin: user.isAdmin,
-        authServiceId: user.authServiceId,
         deletedAt: user.deletedAt,
       });
     if (createQueryResult.length > 0) {
@@ -165,30 +163,29 @@ const updateUser = async (currentUserData: UserJSON) => {
       username: currentUserData.username ?? "",
       preferredName: currentUserData.username ?? "",
     })
-    .where(eq(user.authServiceId, currentUserData.id));
+    .where(eq(user.id, currentUserData.id));
 
   console.log({ updateResults });
 
   return true;
 };
 
-const deleteUser = async (authServiceId: string) => {
+const deleteUser = async (userId: string) => {
   const currentUser = await db.query.user.findFirst({
     columns: {
       id: true,
-      authServiceId: true,
       deletedAt: true,
     },
-    where: eq(user.authServiceId, authServiceId),
+    where: eq(user.id, userId),
   });
 
   if (!currentUser) {
-    console.log(`User ${authServiceId} not found`);
+    console.log(`User ${userId} not found`);
     return false;
   }
 
   if (currentUser?.deletedAt) {
-    console.log(`User ${authServiceId} already deleted`);
+    console.log(`User ${userId} already deleted`);
     return false;
   }
 
@@ -197,7 +194,7 @@ const deleteUser = async (authServiceId: string) => {
     .set({
       deletedAt: new Date(),
     })
-    .where(eq(user.authServiceId, authServiceId));
+    .where(eq(user.id, userId));
 
   return true;
 };
