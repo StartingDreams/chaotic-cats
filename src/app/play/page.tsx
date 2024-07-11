@@ -1,5 +1,5 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { Playground } from "~/app/_components/playground/playground";
+import { Playground } from "~/app/_components/playground";
 
 export default function HomePage() {
   return (

@@ -4,9 +4,10 @@ import {
   timestamp,
   integer,
   varchar,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { env } from "~/env";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { image } from "./image";
 import { breed } from "./breed";
 import { user } from "./user";
@@ -15,6 +16,10 @@ const createTable = pgTableCreator((name) => `${env.TABLE_PREFIX}${name}`);
 
 export const cat = createTable("cat", {
   id: serial("id").primaryKey(),
+  uuid: uuid("uuid")
+    .default(sql`gen_random_uuid()`)
+    .notNull()
+    .unique(),
   name: varchar("name", { length: 50 }).notNull(),
   userId: varchar("user_id", { length: 40 })
     .references(() => user.id)

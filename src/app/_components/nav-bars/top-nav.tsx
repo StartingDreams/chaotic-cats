@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export async function TopNav() {
   return (
-    <nav className="flex h-16 w-full flex-row items-center justify-between gap-4 bg-gradient-to-b from-[#ffffff] to-[#cdcdd1] px-2 text-black">
+    <nav className="flex h-16 w-full flex-row items-center justify-between gap-4 bg-gradient-to-b from-[#000000] to-[#1e1e22] px-2 text-white">
       <div className="flex flex-row items-center gap-4">
         <div className="text-xl font-bold">
           <Link href="/">

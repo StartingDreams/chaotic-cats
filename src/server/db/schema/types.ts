@@ -89,6 +89,7 @@ export type User = {
 
 export type Cat = {
   id: number;
+  uuid: string;
   name: string;
   userId: string;
   user?: User;

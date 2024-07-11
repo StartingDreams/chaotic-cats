@@ -1,6 +1,6 @@
 import { OrganizationList } from "@clerk/nextjs";
 
-export function SelectOrgPage() {
+function SelectOrgPage() {
   return (
     <OrganizationList
       afterSelectOrganizationUrl="/admin"

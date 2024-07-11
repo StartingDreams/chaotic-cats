@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { cat } from "~/server/db/schema";
 
 export function HomePage() {
-  const cats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const cats = ["c32d8b45-92fe-44f6-8b61-42c2107dfe87"];
 
   return (
     <div>

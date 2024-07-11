@@ -1,5 +1,5 @@
 import { fetchMyCats } from "~/app/_actions/fetchCats";
-import { Cat } from "~/app/_components/cat/cat";
+import { Cat } from "~/app/_components/cats/cat";
 
 export async function Playground() {
   const cats = await fetchMyCats();

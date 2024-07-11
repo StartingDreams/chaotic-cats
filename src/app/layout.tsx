@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { GeistSans } from "geist/font/sans";
-import TopNav from "~/app/_components/nav-bar/top-nav";
+import TopNav from "~/app/_components/nav-bars/top-nav";
 
 import "~/styles/globals.css";
 
