@@ -1,6 +1,10 @@
 import AdminNav from "~/app/_components/nav-bars/admin-nav";
 
-export function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex h-full w-full flex-col">
       <h1 className="text-4xl font-bold">Admin</h1>
@@ -12,5 +16,3 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export default AdminLayout;

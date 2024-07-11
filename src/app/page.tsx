@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function HomePage() {
+export default function HomePage() {
   const cats = ["c32d8b45-92fe-44f6-8b61-42c2107dfe87"];
 
   return (
@@ -20,5 +20,3 @@ export function HomePage() {
     </div>
   );
 }
-
-export default HomePage;

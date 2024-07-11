@@ -1,6 +1,6 @@
 import CatDetails from "~/app/_components/cats/cat-details";
 
-export function CatsPage({
+export default function CatsPage({
   params: { id: catId },
 }: {
   params: { id: string };
@@ -11,5 +11,3 @@ export function CatsPage({
     </div>
   );
 }
-
-export default CatsPage;

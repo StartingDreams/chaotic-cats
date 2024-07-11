@@ -1,5 +1,3 @@
-export function DefaultPage() {
+export default function DefaultPage() {
   return null;
 }
-
-export default DefaultPage;

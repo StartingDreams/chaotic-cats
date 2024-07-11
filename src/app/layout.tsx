@@ -11,7 +11,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export function RootLayout({
+export default function RootLayout({
   children,
   modal,
 }: {
@@ -35,5 +35,3 @@ export function RootLayout({
     </ClerkProvider>
   );
 }
-
-export default RootLayout;

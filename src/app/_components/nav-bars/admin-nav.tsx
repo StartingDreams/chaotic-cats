@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function AdminNav() {
+export default function AdminNav() {
   return (
     <div className="flex flex-row flex-wrap gap-4 p-2 text-2xl font-bold">
       <Link
@@ -30,5 +30,3 @@ export function AdminNav() {
     </div>
   );
 }
-
-export default AdminNav;

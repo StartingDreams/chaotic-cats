@@ -1,5 +1,3 @@
-export async function BreedNav() {
+export default async function BreedNav() {
   return null;
 }
-
-export default BreedNav;
